@@ -1,0 +1,25 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk21
+    container_name: jenkins
+    user: root
+    ports:
+      - "8080:8080" # Jenkins Web UI
+      - "50000:50000" # Jenkins agent port
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./src:/workspace/src
+      - ./backend:/workspace/backend
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    networks:
+      - appsec-net
+
+networks:
+  appsec-net:
+    external: true
+
+volumes:
+  jenkins_home:
+    external: true
